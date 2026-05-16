@@ -13,6 +13,7 @@ class GameSprite(sprite.Sprite):
         super().__init__()
         self.image = transform.scale(image.load(imagen), scale)
         self.velocidad = velocidad
+        self.velocidady = velocidad
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -35,8 +36,17 @@ class Player(GameSprite):
     def set_image(self):
         self.image = self.images[self.damage]
 
-barra1 = Player(r'C:\Users\Vic\Documents\Pinping¿¿\racket.png', 15, 350, 5, (35, 135))
-barra2 = Player(r'C:\Users\Vic\Documents\Pinping¿¿\racket.png', 635, 350, 5, (35, 135))
+class Ball(GameSprite):
+    def movimiento(self):
+        self.rect.x += self.velocidad
+        self.rect.y += self.velocidady
+        if self.rect.y <= 0 or self.rect.y >= 480:
+            self.velocidady *= -1
+
+
+barra1 = Player(r'C:\Users\Vic\Documents\Pinping¿¿\racket.png', 15, 350, 5, (25, 135))
+barra2 = Player(r'C:\Users\Vic\Documents\Pinping¿¿\racket.png', 635, 350, 5, (25, 135))
+ball = Ball(r'C:\Users\Vic\Documents\Pinping¿¿\tenis_ball.png', 350, 250, 5, (20, 20))
 
 
 
@@ -47,8 +57,15 @@ while running:
     screen.fill((29, 107, 63))
     barra1.dibujar()
     barra2.dibujar()
+    ball.dibujar()
     barra1.movimiento()
     barra2.movimiento2()
+    ball.movimiento()
+    if sprite.collide_rect(barra1, ball) or sprite.collide_rect(barra2, ball):
+        ball.velocidad *= -1
+    if ball.rect.x <= 0 or ball.rect.x >= 680:
+        ball.rect.x = 350
+        ball.rect.y = 250
 
     # flip() the display to put your work on screen
     display.update()
